@@ -72,6 +72,8 @@ jobs:
           done
           exit 1
 
+      
+
       - name: Show Container Logs
         if: failure()
         run: docker compose logs
@@ -79,3 +81,5 @@ jobs:
       - name: Teardown Containers
         if: always()
         run: docker compose down -v
+
+      
