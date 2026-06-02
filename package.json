@@ -7,16 +7,17 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "turbo build",
-    "dev": "turbo dev",
-    "lint": "turbo lint",
-    "prepare": "husky"
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "prepare": "husky",
+    "test": "echo \"No tests configured\""
   },
   "devDependencies": {
     "husky": "^9.1.7",
     "turbo": "^2.0.0"
   },
-    "pnpm": {
+  "pnpm": {
     "supportedArchitectures": {
       "os": ["current", "linux"],
       "cpu": ["current", "x64"]
