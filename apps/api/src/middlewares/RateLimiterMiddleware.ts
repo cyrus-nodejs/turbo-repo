@@ -54,10 +54,10 @@ export class RateLimiterMiddleware implements NestMiddleware {
       rateLimitRecord.count++;
       await rateLimitRecord.save();
       next();
-    } catch (error) {
-      throw new InternalServerErrorException(
-        error.message || 'Internal server error.',
-      );
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        throw new  InternalServerErrorException(err.message);
+      }
     }
   }
 }

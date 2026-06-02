@@ -1,15 +1,7 @@
 import js from "@eslint/js";
-import globals from "globals";
+import tseslint from "typescript-eslint";
 
 export default [
   js.configs.recommended,
-  {
-    files: ["**/*.{js,ts}"],
-    languageOptions: {
-      globals: {
-        ...globals.node
-      }
-    },
-    rules: {}
-  }
+  ...tseslint.configs.recommended,
 ];
