@@ -1,0 +1,49 @@
+
+services:
+  # 1. Add MongoDB Database Service
+  mongodb:
+    image: mongo:6.0
+    container_name: monorepo_db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=secretpassword
+    restart: always
+
+  # 2. Update NestJS Service
+  api:
+    container_name: monorepo_api
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    ports:
+      - "4000:4000"
+    environment:
+      - NODE_ENV=production
+      # Pass the connection string using the container name 'mongodb' as the host
+      - MONGO_URI=mongodb://root:secretpassword@mongodb:27017/procureapp?authSource=admin
+    restart: always
+    depends_on:
+      - mongodb # Ensures MongoDB starts before your NestJS app
+
+  # 3. Next.js Service (Unchanged but depends on api)
+  web:
+    container_name: monorepo_web
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=http://localhost:4000
+    restart: always
+    depends_on:
+      - api
+
+# Define persistent storage volume so data isn't wiped when containers stop
+volumes:
+  mongo_data:
